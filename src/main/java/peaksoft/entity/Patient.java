@@ -32,8 +32,9 @@ public class Patient {
     @Enumerated(EnumType.STRING)
     Gender gender;
     String email;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH},optional = false)
     Hospital hospital;
     @OneToMany(mappedBy = "patient", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH, CascadeType.REMOVE})
     List<Appointment> appointments;
+
 }

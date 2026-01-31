@@ -33,4 +33,7 @@ public class Doctor {
     List<Department> departments;
     @OneToMany(mappedBy = "doctor", cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     List<Appointment> appointments;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH},optional = false)
+    @JoinColumn(name = "hospital_id")
+    Hospital hospital;
 }

@@ -28,4 +28,7 @@ public class Department {
     String name;
     @ManyToMany(mappedBy = "departments", cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
     List<Doctor> doctors;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH},optional = false)
+    @JoinColumn(name = "hospital_id")
+    Hospital hospital;
 }
