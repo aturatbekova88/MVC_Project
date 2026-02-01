@@ -19,26 +19,29 @@ public class HospitalRepoImpl implements HospitalRepo {
 
     @Override
     public void saveHospital(Hospital hospital) {
-
+        entityManager.persist(hospital);
     }
 
     @Override
     public List<Hospital> getAllHospitals() {
-        return null;
+        return entityManager.createQuery("select h from Hospital h", Hospital.class).getResultList();
     }
 
     @Override
     public Hospital getById(Long id) {
-        return null;
+        return entityManager.find(Hospital.class, id);
     }
 
     @Override
     public void updateHospital(Long id, Hospital newHospital) {
-
+        Hospital hospital = entityManager.find(Hospital.class,id);
+        hospital.setName(newHospital.getName());
+        hospital.setAddress(newHospital.getAddress());
     }
 
     @Override
     public void deleteHospital(Long id) {
-
+        Hospital hospital = getById(id);
+        entityManager.remove(hospital);
     }
 }

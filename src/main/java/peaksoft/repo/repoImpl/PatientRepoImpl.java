@@ -19,26 +19,32 @@ public class PatientRepoImpl implements PatientRepo {
 
     @Override
     public void savePatient(Patient patient) {
-
+        entityManager.persist(patient);
     }
 
     @Override
     public List<Patient> getAllPatients() {
-        return null;
+        return entityManager.createQuery("select p from Patient p", Patient.class).getResultList();
     }
 
     @Override
     public Patient getById(Long id) {
-        return null;
+        return entityManager.find(Patient.class, id);
     }
 
     @Override
     public void updatePatient(Long id, Patient newPatient) {
-
+        Patient patient = entityManager.find(Patient.class, id);
+        patient.setFirstName(newPatient.getFirstName());
+        patient.setLastName(newPatient.getLastName());
+        patient.setPhoneNumber(newPatient.getPhoneNumber());
+        patient.setGender(newPatient.getGender());
+        patient.setEmail(newPatient.getEmail());
     }
 
     @Override
     public void deletePatient(Long id) {
-
+        Patient patient = getById(id);
+        entityManager.remove(patient);
     }
 }

@@ -15,26 +15,26 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public void saveHospital(Hospital hospital) {
-
+        hospitalRepo.saveHospital(hospital);
     }
 
     @Override
     public List<Hospital> getAllHospitals() {
-        return null;
+        return hospitalRepo.getAllHospitals();
     }
 
     @Override
     public Hospital getById(Long id) {
-        return null;
+        return hospitalRepo.getById(id);
     }
 
     @Override
     public void updateHospital(Long id, Hospital newHospital) {
-
+        hospitalRepo.updateHospital(id,newHospital);
     }
 
     @Override
     public void deleteHospital(Long id) {
-
+        hospitalRepo.deleteHospital(id);
     }
 }
