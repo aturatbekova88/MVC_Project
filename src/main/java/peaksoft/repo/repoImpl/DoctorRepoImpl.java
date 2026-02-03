@@ -19,26 +19,35 @@ public class DoctorRepoImpl implements DoctorRepo {
 
     @Override
     public void saveDoctor(Doctor doctor) {
-
+        entityManager.persist(doctor);
     }
 
     @Override
     public List<Doctor> getAllDoctors() {
-        return null;
+        return entityManager.createQuery("select d from Doctor d",Doctor.class).getResultList();
     }
 
     @Override
     public Doctor getById(Long id) {
-        return null;
+        return entityManager.find(Doctor.class, id);
     }
 
     @Override
     public void updateDoctor(Long id, Doctor newDoctor) {
-
+        Doctor doctor = getById(id);
+        doctor.setFirstName(newDoctor.getFirstName());
+        doctor.setLastName(newDoctor.getLastName());
+        doctor.setPosition(newDoctor.getPosition());
+        doctor.setEmail(newDoctor.getEmail());
     }
 
     @Override
     public void deleteDoctor(Long id) {
+        entityManager.remove(getById(id));
+    }
+
+    @Override
+    public void assignHospitalAndDepartment(Doctor doctor, Long hospitalId, Long departmentId) {
 
     }
 }

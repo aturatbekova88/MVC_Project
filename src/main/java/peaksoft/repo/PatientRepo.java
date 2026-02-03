@@ -15,4 +15,5 @@ public interface PatientRepo {
     Patient getById(Long id);
     void updatePatient(Long id,Patient newPatient);
     void deletePatient(Long id);
+    void assignHospital(Patient patient, Long hospitalId);
 }

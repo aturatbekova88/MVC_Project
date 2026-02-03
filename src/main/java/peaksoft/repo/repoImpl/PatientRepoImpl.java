@@ -47,4 +47,9 @@ public class PatientRepoImpl implements PatientRepo {
         Patient patient = getById(id);
         entityManager.remove(patient);
     }
+
+    @Override
+    public void assignHospital(Patient patient, Long hospitalId) {
+
+    }
 }

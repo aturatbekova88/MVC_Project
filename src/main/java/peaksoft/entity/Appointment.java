@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
@@ -25,7 +26,8 @@ public class Appointment {
      allocationSize = 1
      )
     Long id;
-    LocalDate date;
+    @Column(nullable = false)
+    LocalDateTime date;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH},optional = false)
     Patient patient;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH},optional = false)

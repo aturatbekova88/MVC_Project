@@ -1,5 +1,6 @@
 package peaksoft.service.serviceImpl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import peaksoft.entity.Hospital;
@@ -9,12 +10,16 @@ import peaksoft.service.HospitalService;
 import java.util.List;
 
 @Service//add this annotation
+@Transactional
 @RequiredArgsConstructor
 public class HospitalServiceImpl implements HospitalService {
     private final HospitalRepo hospitalRepo;
 
     @Override
     public void saveHospital(Hospital hospital) {
+        if (hospital.getName() == null || hospital.getAddress() == null) {
+            throw new RuntimeException("Hospital name and address cannot be null!");
+        }
         hospitalRepo.saveHospital(hospital);
     }
 

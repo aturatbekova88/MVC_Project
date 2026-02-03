@@ -1,13 +1,9 @@
 package peaksoft.service;
 
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Repository;
 import peaksoft.entity.Doctor;
 
 import java.util.List;
 
-@Repository
-@Transactional
 public interface DoctorService {
 
     void saveDoctor(Doctor doctor);
@@ -15,4 +11,5 @@ public interface DoctorService {
     Doctor getById(Long id);
     void updateDoctor(Long id,Doctor newDoctor);
     void deleteDoctor(Long id);
+    void assignHospitalAndDepartment(Doctor doctor, Long hospitalId, Long departmentId);
 }

@@ -25,8 +25,9 @@ public class Department {
             allocationSize = 1
     )
     Long id;
+    @Column(nullable = false)
     String name;
-    @ManyToMany(mappedBy = "departments", cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
+    @OneToMany(mappedBy = "department", cascade = {CascadeType.REFRESH, CascadeType.MERGE, CascadeType.DETACH})
     List<Doctor> doctors;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH,CascadeType.DETACH},optional = false)
     @JoinColumn(name = "hospital_id")

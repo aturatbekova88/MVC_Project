@@ -19,26 +19,32 @@ public class AppointmentRepoImpl implements AppointmentRepo {
 
     @Override
     public void saveAppointment(Appointment appointment) {
-
+        entityManager.persist(appointment);
     }
 
     @Override
     public List<Appointment> getAllAppointments() {
-        return null;
+        return entityManager.createQuery("select a from Appointment a order by a.date desc", Appointment.class).getResultList();
     }
 
     @Override
     public Appointment getById(Long id) {
-        return null;
+        return entityManager.find(Appointment.class, id);
     }
 
     @Override
     public void updateAppointment(Long id, Appointment newAppointment) {
-
+        Appointment appointment = getById(id);
+        appointment.setDate(newAppointment.getDate());
     }
 
     @Override
     public void deleteAppointment(Long id) {
+        entityManager.remove(getById(id));
+    }
+
+    @Override
+    public void assignEntities(Appointment appointment, Long patientId, Long doctorId, Long departmentId, Long hospitalId) {
 
     }
 }

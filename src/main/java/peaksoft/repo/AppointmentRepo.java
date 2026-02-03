@@ -15,4 +15,5 @@ public interface AppointmentRepo {
     Appointment getById(Long id);
     void updateAppointment(Long id,Appointment newAppointment);
     void deleteAppointment(Long id);
+    void assignEntities(Appointment appointment, Long patientId, Long doctorId, Long departmentId, Long hospitalId);
 }

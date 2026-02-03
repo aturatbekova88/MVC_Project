@@ -26,11 +26,15 @@ public class Patient {
             allocationSize = 1
     )
     Long id;
+    @Column(nullable = false)
     String firstName;
+    @Column(nullable = false)
     String lastName;
+    @Column(nullable = false)
     String phoneNumber;
     @Enumerated(EnumType.STRING)
     Gender gender;
+    @Column(nullable = false, unique = true)
     String email;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.DETACH},optional = false)
     Hospital hospital;

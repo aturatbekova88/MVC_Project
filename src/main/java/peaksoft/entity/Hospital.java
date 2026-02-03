@@ -25,7 +25,9 @@ public class Hospital {
             allocationSize = 1
     )
     Long id;
+    @Column(nullable = false)
     String name;
+    @Column(nullable = false)
     String address;
     @OneToMany(mappedBy = "hospital",cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     List<Doctor> doctors;
@@ -35,4 +37,12 @@ public class Hospital {
     List<Department> departments;
     @OneToMany(mappedBy = "hospital",cascade = {CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE})
     List<Appointment> appointments;
+
+    public int getDoctorCount() {
+        return doctors.size();
+    }
+
+    public int getPatientCount() {
+        return patients.size();
+    }
 }

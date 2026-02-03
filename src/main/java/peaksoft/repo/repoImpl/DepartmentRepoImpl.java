@@ -19,26 +19,33 @@ public class DepartmentRepoImpl implements DepartmentRepo {
 
     @Override
     public void saveDepartment(Department department) {
-
+        entityManager.persist(department);
     }
 
     @Override
     public List<Department> getAllDepartments() {
-        return null;
+        return entityManager.createQuery("select d from Department d", Department.class).getResultList();
     }
 
     @Override
     public Department getById(Long id) {
-        return null;
+        return entityManager.find(Department.class, id);
     }
 
     @Override
     public void updateDepartment(Long id, Department newDepartment) {
-
+        Department department = getById(id);
+        department.setName(newDepartment.getName());
     }
 
     @Override
     public void deleteDepartment(Long id) {
+        entityManager.remove(getById(id));
+    }
+
+    @Override
+    public void assignHospital(Department department, Long hospitalId) {
 
     }
+
 }
