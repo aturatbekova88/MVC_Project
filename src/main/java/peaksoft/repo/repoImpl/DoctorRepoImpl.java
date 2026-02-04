@@ -5,7 +5,9 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import peaksoft.entity.Department;
 import peaksoft.entity.Doctor;
+import peaksoft.entity.Hospital;
 import peaksoft.repo.DoctorRepo;
 
 import java.util.List;
@@ -18,7 +20,9 @@ public class DoctorRepoImpl implements DoctorRepo {
     private final EntityManager entityManager;
 
     @Override
-    public void saveDoctor(Doctor doctor) {
+    public void saveDoctor(Long hospitalId,Doctor doctor) {
+        Hospital hospital = entityManager.find(Hospital.class, hospitalId);
+        doctor.setHospital(hospital);
         entityManager.persist(doctor);
     }
 
@@ -47,7 +51,11 @@ public class DoctorRepoImpl implements DoctorRepo {
     }
 
     @Override
-    public void assignHospitalAndDepartment(Doctor doctor, Long hospitalId, Long departmentId) {
-
+    public void assignDoctorToDepartment(Long doctorId, Long departmentId) {
+        Doctor doctor = getById(doctorId);
+        Department department = entityManager.find(Department.class, departmentId);
+        doctor.setDepartment(department);
     }
+
+
 }

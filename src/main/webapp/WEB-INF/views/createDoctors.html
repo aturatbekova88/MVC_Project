@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${doctor != null} ? 'Edit Doctor' : 'Add Doctor'">Doctor Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h3>Add Doctor</h3>
+    <form th:action="@{/doctors/save/{id}(id=${hospitalId})}" th:object="${doctor}" method="post">
+        <input class="form-control mb-2" th:field="*{firstName}" placeholder="First name">
+        <input class="form-control mb-2" th:field="*{lastName}" placeholder="Last name">
+        <input class="form-control mb-2" th:field="*{position}" placeholder="Position">
+        <input class="form-control mb-2" th:field="*{email}" placeholder="Email">
+        <select class="form-control mb-2" name="departmentId">
+            <option th:each="d:${departments}" th:value="${d.id}" th:text="${d.name}"></option>
+        </select>
+        <button class="btn btn-success">Save</button>
+    </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

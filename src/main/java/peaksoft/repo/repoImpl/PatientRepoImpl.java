@@ -5,6 +5,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import peaksoft.entity.Hospital;
 import peaksoft.entity.Patient;
 import peaksoft.repo.PatientRepo;
 
@@ -18,7 +19,12 @@ public class PatientRepoImpl implements PatientRepo {
     private final EntityManager entityManager;
 
     @Override
-    public void savePatient(Patient patient) {
+    public void savePatient(Long hospitalId,Patient patient) {
+        if (!patient.getPhoneNumber().startsWith("+996")) {
+            throw new RuntimeException("Phone number must start with +996");
+        }
+        Hospital hospital = entityManager.find(Hospital.class, hospitalId);
+        patient.setHospital(hospital);
         entityManager.persist(patient);
     }
 
@@ -50,6 +56,6 @@ public class PatientRepoImpl implements PatientRepo {
 
     @Override
     public void assignHospital(Patient patient, Long hospitalId) {
-
+        patient.setHospital(entityManager.find(Hospital.class, hospitalId));
     }
 }

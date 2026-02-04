@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import peaksoft.entity.Department;
+import peaksoft.entity.Hospital;
 import peaksoft.repo.DepartmentRepo;
 
 import java.util.List;
@@ -18,13 +19,31 @@ public class DepartmentRepoImpl implements DepartmentRepo {
     private final EntityManager entityManager;
 
     @Override
-    public void saveDepartment(Department department) {
+    public void saveDepartment(Long hospitalId, Department department) {
+        Hospital hospital = entityManager.find(Hospital.class, hospitalId);
+        if (hospital == null) {
+            throw new RuntimeException("Hospital not found!");
+        }
+        List<Department> departments = entityManager.createQuery(
+                        "select d from Department d " +
+                                "where d.name = :name and d.hospital.id = :hid",
+                        Department.class
+                )
+                .setParameter("name", department.getName())
+                .setParameter("hid", hospitalId)
+                .getResultList();
+
+        if (!departments.isEmpty()) {
+            throw new RuntimeException("Department already exists!");
+        }
+        department.setHospital(hospital);
         entityManager.persist(department);
     }
 
+
     @Override
-    public List<Department> getAllDepartments() {
-        return entityManager.createQuery("select d from Department d", Department.class).getResultList();
+    public List<Department> getAllDepartments(Long hospitalId) {
+        return entityManager.createQuery("select d from Department d where d.hospital.id = :id", Department.class).setParameter("id", hospitalId).getResultList();
     }
 
     @Override
@@ -41,11 +60,6 @@ public class DepartmentRepoImpl implements DepartmentRepo {
     @Override
     public void deleteDepartment(Long id) {
         entityManager.remove(getById(id));
-    }
-
-    @Override
-    public void assignHospital(Department department, Long hospitalId) {
-
     }
 
 }

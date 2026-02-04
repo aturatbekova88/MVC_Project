@@ -7,7 +7,10 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Table(name = "departments")
+@Table(name = "departments",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"name", "hospital_id"})
+        })
 @Getter
 @Setter
 @NoArgsConstructor

@@ -8,37 +8,39 @@ import peaksoft.entity.Patient;
 import peaksoft.service.HospitalService;
 import peaksoft.service.PatientService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/patients")
 @RequiredArgsConstructor
 public class PatientController {
     private final PatientService patientService;
-    private final HospitalService hospitalService;
 
     @GetMapping
     public String getAllPatients(Model model) {
-        model.addAttribute("patients", patientService.getAllPatients());
-        return "patientList";
+        List<Patient> patients = patientService.getAllPatients();
+        model.addAttribute("patients",patients);
+        return "patients";
     }
 
-    @GetMapping("/new")
-    public String newPatient(Model model) {
+    @GetMapping("/new/{hospitalId}")
+    public String createPatient(@PathVariable Long hospitalId,Model model) {
         model.addAttribute("patient", new Patient());
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        return "patientForm";
+        model.addAttribute("hospitals", hospitalId);
+        return "createPatients";
     }
 
-    @PostMapping("/save")
-    public String savePatient(@ModelAttribute Patient patient, @RequestParam Long hospitalId) {
-        patientService.assignHospital(patient, hospitalId);
+    @PostMapping("/save/{hospitalId}")
+    public String savePatient(@ModelAttribute Patient patient, @PathVariable Long hospitalId) {
+        patientService.savePatient(hospitalId, patient);
         return "redirect:/patients";
     }
 
     @GetMapping("/edit/{id}")
     public String editPatient(@PathVariable Long id, Model model) {
-        model.addAttribute("patient", patientService.getById(id));
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        return "patientForm";
+        Patient patient = patientService.getById(id);
+        model.addAttribute("patient", patient);
+        return "editPatient";
     }
 
     @PostMapping("/update/{id}")

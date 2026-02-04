@@ -22,7 +22,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final DepartmentService departmentService;
 
     @Override
-    public void saveDoctor(Doctor doctor) {
+    public void saveDoctor(Long hospitalId,Doctor doctor) {
         if (doctor.getEmail() == null || doctor.getFirstName() == null || doctor.getLastName() == null) {
             throw new RuntimeException("Doctor fields cannot be null!");
         }
@@ -32,7 +32,7 @@ public class DoctorServiceImpl implements DoctorService {
                 throw new RuntimeException("Doctor email must be unique!");
             }
         }
-        doctorRepo.saveDoctor(doctor);
+        doctorRepo.saveDoctor(hospitalId,doctor);
     }
 
     @Override
@@ -56,10 +56,9 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void assignHospitalAndDepartment(Doctor doctor, Long hospitalId, Long departmentId) {
-        Hospital hospital = hospitalService.getById(hospitalId);
-        Department department = departmentService.getById(departmentId);
-        doctor.setHospital(hospital);
-        doctor.setDepartment(department);
+    public void assignDoctorToDepartment(Long doctorId, Long departmentId) {
+        doctorRepo.assignDoctorToDepartment(doctorId, departmentId);
     }
+
+
 }

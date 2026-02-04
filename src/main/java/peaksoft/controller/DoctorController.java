@@ -9,6 +9,8 @@ import peaksoft.service.DepartmentService;
 import peaksoft.service.DoctorService;
 import peaksoft.service.HospitalService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/doctors")
 @RequiredArgsConstructor
@@ -19,40 +21,41 @@ public class DoctorController {
 
     @GetMapping
     public String getAllDoctors(Model model) {
-        model.addAttribute("doctors", doctorService.getAllDoctors());
-        return "doctorList";
+        List<Doctor> doctors = doctorService.getAllDoctors();
+        model.addAttribute("doctors", doctors);
+        return "doctors";
     }
 
-    @GetMapping("/new")
-    public String newDoctor(Model model) {
+    @GetMapping("/new/{hospitalId}")
+    public String create(Model model,
+                         @PathVariable Long hospitalId){
         model.addAttribute("doctor", new Doctor());
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        return "doctorForm";
+        model.addAttribute("hospitalId", hospitalId);
+        model.addAttribute("departments",
+                departmentService.getAllDepartments(hospitalId));
+        return "createDoctors";
     }
 
-    @PostMapping("/save")
-    public String saveDoctor(@ModelAttribute Doctor doctor,
-                             @RequestParam Long hospitalId,
-                             @RequestParam Long departmentId) {
-        doctorService.assignHospitalAndDepartment(doctor, hospitalId, departmentId);
+    @PostMapping("/save/{hospitalId}")
+    public String save(@PathVariable Long hospitalId,
+                       @ModelAttribute Doctor doctor){
+        doctorService.saveDoctor(hospitalId, doctor);
         return "redirect:/doctors";
     }
 
     @GetMapping("/edit/{id}")
     public String editDoctor(@PathVariable Long id, Model model) {
-        model.addAttribute("doctor", doctorService.getById(id));
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        return "doctorForm";
+        Doctor doctor = doctorService.getById(id);
+        model.addAttribute("doctor", doctor);
+        model.addAttribute("departments", departmentService.getAllDepartments(doctor.getHospital().getId()));
+        return "editDoctor";
     }
 
     @PostMapping("/update/{id}")
     public String updateDoctor(@PathVariable Long id,
                                @ModelAttribute Doctor doctor,
-                               @RequestParam Long hospitalId,
                                @RequestParam Long departmentId) {
-        doctorService.assignHospitalAndDepartment(doctor, hospitalId, departmentId);
+        doctorService.assignDoctorToDepartment(id, departmentId);
         doctorService.updateDoctor(id, doctor);
         return "redirect:/doctors";
     }

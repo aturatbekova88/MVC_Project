@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import peaksoft.entity.Appointment;
 import peaksoft.service.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/appointments")
 @RequiredArgsConstructor
@@ -15,43 +17,55 @@ public class AppointmentController {
     private final PatientService patientService;
     private final DoctorService doctorService;
     private final DepartmentService departmentService;
-    private final HospitalService hospitalService;
 
-    @GetMapping
-    public String getAllAppointments(Model model) {
-        model.addAttribute("appointments", appointmentService.getAllAppointments());
-        return "appointmentList";
+    @GetMapping("/{hospitalId}")
+    public String getAllAppointments(@PathVariable Long hospitalId,Model model) {
+        List<Appointment> appointments = appointmentService.getAllAppointments(hospitalId);
+        model.addAttribute("appointments", appointments);
+        model.addAttribute("hospitalId", hospitalId);
+        return "appointments";
     }
 
-    @GetMapping("/new")
-    public String newAppointment(Model model) {
+    @GetMapping("/new/{hospitalId}")
+    public String create(@PathVariable Long hospitalId, Model model){
         model.addAttribute("appointment", new Appointment());
         model.addAttribute("patients", patientService.getAllPatients());
         model.addAttribute("doctors", doctorService.getAllDoctors());
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        return "appointmentForm";
+        model.addAttribute("departments",
+                departmentService.getAllDepartments(hospitalId));
+        model.addAttribute("hospitalId", hospitalId);
+        return "createAppointment";
     }
 
-    @PostMapping("/save")
-    public String saveAppointment(@ModelAttribute Appointment appointment,
-                                  @RequestParam Long patientId,
-                                  @RequestParam Long doctorId,
-                                  @RequestParam Long departmentId,
-                                  @RequestParam Long hospitalId) {
 
-        appointmentService.assignEntities(appointment, patientId, doctorId, departmentId, hospitalId);
-        return "redirect:/appointments";
+    @PostMapping("/save/{hospitalId}")
+    public String save(@PathVariable Long hospitalId,
+                       @ModelAttribute Appointment appointment,
+                       @RequestParam Long patientId,
+                       @RequestParam Long doctorId,
+                       @RequestParam Long departmentId){
+
+        appointmentService.assignEntities(
+                appointment,
+                patientId,
+                doctorId,
+                departmentId,
+                hospitalId
+        );
+
+        appointmentService.saveAppointment(hospitalId, appointment);
+
+        return "redirect:/appointments/" + hospitalId;
     }
 
     @GetMapping("/edit/{id}")
     public String editAppointment(@PathVariable Long id, Model model) {
-        model.addAttribute("appointment", appointmentService.getById(id));
+        Appointment appointment = appointmentService.getById(id);
+        model.addAttribute("appointment", appointment);
         model.addAttribute("patients", patientService.getAllPatients());
         model.addAttribute("doctors", doctorService.getAllDoctors());
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        model.addAttribute("hospitals", hospitalService.getAllHospitals());
-        return "appointmentForm";
+        model.addAttribute("departments", departmentService.getAllDepartments(appointment.getHospital().getId()));
+        return "editAppointment";
     }
 
     @PostMapping("/update/{id}")
@@ -59,18 +73,17 @@ public class AppointmentController {
                                     @ModelAttribute Appointment appointment,
                                     @RequestParam Long patientId,
                                     @RequestParam Long doctorId,
-                                    @RequestParam Long departmentId,
-                                    @RequestParam Long hospitalId) {
-
-        appointmentService.assignEntities(appointment, patientId, doctorId, departmentId, hospitalId);
+                                    @RequestParam Long departmentId) {
+        appointmentService.assignEntities(appointment, patientId, doctorId, departmentId, appointment.getHospital().getId());
         appointmentService.updateAppointment(id, appointment);
-        return "redirect:/appointments";
+        return "redirect:/appointments/" + appointment.getHospital().getId();
     }
 
     @GetMapping("/delete/{id}")
     public String deleteAppointment(@PathVariable Long id) {
+        Long hospitalId = appointmentService.getById(id).getHospital().getId();
         appointmentService.deleteAppointment(id);
-        return "redirect:/appointments";
+        return "redirect:/appointments/" + hospitalId;
     }
 }
 

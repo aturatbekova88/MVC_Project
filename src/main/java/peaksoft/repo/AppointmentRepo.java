@@ -10,8 +10,8 @@ import java.util.List;
 @Transactional
 public interface AppointmentRepo {
 
-    void saveAppointment(Appointment appointment);
-    List<Appointment> getAllAppointments();
+    void saveAppointment(Long hospitalId,Appointment appointment);
+    List<Appointment> getAllAppointments(Long hospitalId);
     Appointment getById(Long id);
     void updateAppointment(Long id,Appointment newAppointment);
     void deleteAppointment(Long id);

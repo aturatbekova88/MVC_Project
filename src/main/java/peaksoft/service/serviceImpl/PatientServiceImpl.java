@@ -19,14 +19,14 @@ public class PatientServiceImpl implements PatientService {
     private final HospitalService hospitalService;
 
     @Override
-    public void savePatient(Patient patient) {
+    public void savePatient(Long hospitalId, Patient patient) {
         if (patient.getFirstName() == null || patient.getLastName() == null || patient.getPhoneNumber() == null) {
             throw new RuntimeException("Patient fields cannot be null!");
         }
         if (!patient.getPhoneNumber().startsWith("+996")) {
             throw new RuntimeException("Phone number must start with +996");
         }
-        patientRepo.savePatient(patient);
+        patientRepo.savePatient(hospitalId, patient);
     }
 
     @Override

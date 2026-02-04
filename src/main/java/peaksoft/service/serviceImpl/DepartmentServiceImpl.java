@@ -19,22 +19,13 @@ public class DepartmentServiceImpl implements DepartmentService {
     private final HospitalService hospitalService;
 
     @Override
-    public void saveDepartment(Department department) {
-        if (department.getName() == null) {
-            throw new RuntimeException("Department name cannot be null!");
-        }
-        // проверка на уникальность
-        for (Department d : departmentRepo.getAllDepartments()) {
-            if (d.getName().equalsIgnoreCase(department.getName())) {
-                throw new RuntimeException("Department with this name already exists!");
-            }
-        }
-        departmentRepo.saveDepartment(department);
+    public void saveDepartment(Long hospitalId,Department department) {
+        departmentRepo.saveDepartment(hospitalId, department);
     }
 
     @Override
-    public List<Department> getAllDepartments() {
-        return departmentRepo.getAllDepartments();
+    public List<Department> getAllDepartments(Long hospitalId) {
+        return departmentRepo.getAllDepartments(hospitalId);
     }
 
     @Override
@@ -50,12 +41,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public void deleteDepartment(Long id) {
         departmentRepo.deleteDepartment(id);
-    }
-
-    @Override
-    public void assignHospital(Department department, Long hospitalId) {
-        Hospital hospital = hospitalService.getById(hospitalId);
-        department.setHospital(hospital);
     }
 
 

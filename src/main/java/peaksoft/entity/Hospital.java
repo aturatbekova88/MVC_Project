@@ -39,10 +39,10 @@ public class Hospital {
     List<Appointment> appointments;
 
     public int getDoctorCount() {
-        return doctors.size();
+        return doctors == null ? 0 : doctors.size();
     }
 
     public int getPatientCount() {
-        return patients.size();
+        return patients == null ? 0 : patients.size();
     }
 }

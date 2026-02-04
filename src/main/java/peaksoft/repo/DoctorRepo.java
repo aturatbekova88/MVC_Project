@@ -10,10 +10,15 @@ import java.util.List;
 @Transactional
 public interface DoctorRepo {
 
-    void saveDoctor(Doctor doctor);
+    void saveDoctor(Long hospitalId, Doctor doctor);
+
     List<Doctor> getAllDoctors();
+
     Doctor getById(Long id);
-    void updateDoctor(Long id,Doctor newDoctor);
+
+    void updateDoctor(Long id, Doctor newDoctor);
+
     void deleteDoctor(Long id);
-    void assignHospitalAndDepartment(Doctor doctor, Long hospitalId, Long departmentId);
+
+    void assignDoctorToDepartment(Long doctorId, Long departmentId);
 }

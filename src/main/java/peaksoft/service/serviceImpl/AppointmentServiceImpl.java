@@ -20,13 +20,13 @@ public class AppointmentServiceImpl implements AppointmentService {
     private final HospitalService hospitalService;
 
     @Override
-    public void saveAppointment(Appointment appointment) {
-        appointmentRepo.saveAppointment(appointment);
+    public void saveAppointment(Long hospitalId,Appointment appointment) {
+        appointmentRepo.saveAppointment(hospitalId, appointment);
     }
 
     @Override
-    public List<Appointment> getAllAppointments() {
-        return appointmentRepo.getAllAppointments();
+    public List<Appointment> getAllAppointments(Long hospitalId) {
+        return appointmentRepo.getAllAppointments(hospitalId);
     }
 
     @Override
